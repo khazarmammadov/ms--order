@@ -18,4 +18,10 @@ public class OrderController {
     public void createOrder(@RequestBody CreateOrderRequest createOrderRequest){
         orderService.createOrder(createOrderRequest);
     }
+
+    @PostMapping("/{orderId}/confirm")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void confirmOrder(@PathVariable Long orderId) {
+        orderService.confirmOrder(orderId);
+    }
 }

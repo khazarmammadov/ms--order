@@ -7,33 +7,26 @@ import lombok.extern.slf4j.Slf4j;
 import org.khazar.msOrder.exception.ClientException;
 import org.khazar.msOrder.exception.ErrorResponse;
 import org.khazar.msOrder.model.client.MenuItemDto;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestClient;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class MenuClient {
 
-    private final RestClient restClient;
     private final ObjectMapper objectMapper;
 
-    @Value("${client.urls.menu-service}")
-    private String menuServiceUrl;
+    private final MenuClientThirdParty  menuClientThirdParty;
 
     @SneakyThrows
     public MenuItemDto getMenuItemById(Long id) {
         log.info("ActionLog.MenuClient.getMenuItemById.start - id: {}", id);
-        var url = String.format(menuServiceUrl + "/%d", id);
 
         try {
-            var menuItem = restClient.get()
-                    .uri(url)
-                    .retrieve()
-                    .body(MenuItemDto.class);
+            var menuItem = menuClientThirdParty.getMenuItemById(id);
+
             log.info("ActionLog.MenuClient.getMenuItemById.success - id: {}, menuItem: {}", id, menuItem);
             return menuItem;
         } catch (HttpStatusCodeException exception) {

@@ -8,14 +8,15 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class KafkaHelper<T> {
+public class KafkaHelper {
 
-    private final KafkaTemplate<String, T> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    public void sendMessage(String topic, T message) {
-        log.info("ActionLog.topic.message.start - topic: {}, message: {}", topic, message);
+
+    public <T> void send(String topic, T message) {
+        log.info("Sending to topic {}: {}", topic, message);
         kafkaTemplate.send(topic, message);
-        log.info("ActionLog.topic.message.end - topic: {}, message: {}", topic, message);
     }
+
 
 }
